@@ -11,6 +11,7 @@ green = (0, 130, 0)
 wgreen = (0, 50, 0)
 red = (213, 50, 80)
 bgreen = (0, 85, 0)
+gray = (70, 70, 70)
 # Початкові координати та рух
 x1 = 300
 y1 = 200
@@ -25,7 +26,7 @@ snake_list = []
 lenght_of_snake = 1
 while True:
     # 1. ОЧИЩЕННЯ ЕКРАНА
-    dis.fill(green)
+    dis.fill(gray)
     pygame.display.set_caption("Змійка версія 0.0")
 
     # 2. ВИХІД, КЕРУВАННЯ ТА СМЕРТЬ(ВРІЗАННЯ В БОРДЕР)
@@ -71,13 +72,13 @@ while True:
 
     # 7. МАЛЮВАННЯ
     # Яблуко
-    pygame.draw.rect(dis, red, [foodx, foody, 10, 10])
+    pygame.draw.rect(dis, red, [foodx, foody, 20, 20])
 
     #Змійка
     for x in snake_list:
-        pygame.draw.rect(dis, bgreen, [x1, y1, 10, 10])
+        pygame.draw.rect(dis, bgreen, [x1, y1, 20, 20])
         for segment in snake_list[:-1]:  # Беремо все, крім останнього
-         pygame.draw.rect(dis, wgreen, [segment[0], segment[1], 10, 10])
+         pygame.draw.rect(dis, wgreen, [segment[0], segment[1], 20, 20])
 
     # 8. ОНОВЛЕННЯ ДИСПЛЕЮ
     pygame.display.update()
