@@ -1,5 +1,7 @@
+import os
 register_name = []
 the_poem_book = {}
+name = input("Введіть нікнейм")
 def menu(new_poem):
     print("Вибери дію:"
           "\n 1. Новий вірш"
@@ -8,19 +10,22 @@ def menu(new_poem):
           "\n 4. Повторна реєстрація")
     choice = int(input("Укажи свій вибір: "))
     if choice == 1:
-        new_poem(menu)
+        new_poem(menu, name)
     elif choice == 2:
         search_poem()
-def new_poem(menu):
+def new_poem(menu, name):
     name_poem = input("Введи назву вірша:")
     con_poem = input("Введи текст вірша:")
     print(con_poem, "\n Чудовий вірш!")
     if name_poem not in the_poem_book:
         the_poem_book[name_poem] = con_poem
-        menu(new_poem)
+
+        with open(f"{name}.txt", "a", encoding="utf-8") as f:
+            f.write(f"{name_poem}:{con_poem}\n")
+
+        return  # ЗАМІСТЬ menu(new_poem) пиши return
     else:
         print("Помилка! Така назва вже існує! Введіть дані повторно")
-        new_poem(menu)
 
 def search_poem():
     titles = list(the_poem_book.keys())
@@ -51,16 +56,26 @@ def search_poem():
         else:
             print("Помилка! Недійсне значення!")
 def name_menu():
-    name = input("Введіть нікнейм")
-    if name not in register_name:
-        register_name.append(name)
-        print(register_name)
-        return True
+        user_file = f"{name}.txt"
 
-    else:
-        print("Помилка")
-        print((register_name))
-while True:
-    if name_menu():
-     menu(new_poem)
-     break
+        # Якщо файлу НЕМАЄ — створюємо його порожнім ОДИН РАЗ
+        if not os.path.exists(user_file):
+            with open(user_file, "w", encoding="utf-8") as f:
+                pass
+
+        the_poem_book.clear()
+
+        # Читаємо файл користувача рядок за рядком
+        with open(f"{name}.txt", "r", encoding="utf-8") as f:
+            for line in f:
+                if ":" in line:
+                    # Розділяємо рядок на назву та текст вірша
+                    title, text = line.strip().split(":", 1)
+                    the_poem_book[title] = text
+                    return True
+                else:
+                   print("Помилка")
+                   print((register_name))
+if name_menu():
+    while True:
+        menu(new_poem)
